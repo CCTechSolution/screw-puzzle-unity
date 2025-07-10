@@ -1,0 +1,111 @@
+%!Adobe-FontList 1.24
+%Locale:0x409
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:ABCSans-Black
+FamilyName:ABCSans
+StyleName:Black
+FullName:ABCSans Black
+MenuName:ABCSans
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:D:\other data\screw puzzle\new ui\Font\abcsans-black.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+hasCOLR:no
+VariableFontType:NonVariableFont
+FileLength:99612
+FileModTime:1743147164
+WeightClass:900
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,18,ABCSans Black
+NameArray:0,Mac,4,ABCSans Black
+NameArray:0,Win,1,ABCSans
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:ABCSans-Bold
+FamilyName:ABCSans
+StyleName:Bold
+FullName:ABCSans Bold
+MenuName:ABCSans
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:D:\other data\screw puzzle\new ui\Font\abcsans-bold.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+hasCOLR:no
+VariableFontType:NonVariableFont
+FileLength:75308
+FileModTime:1743147164
+WeightClass:700
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,18,ABCSans Bold
+NameArray:0,Mac,4,ABCSans Bold
+NameArray:0,Win,1,ABCSans
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:ABCSans-Light
+FamilyName:ABCSans
+StyleName:Light
+FullName:ABCSans Light
+MenuName:ABCSans
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:D:\other data\screw puzzle\new ui\Font\abcsans-light.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+hasCOLR:no
+VariableFontType:NonVariableFont
+FileLength:82224
+FileModTime:1743147164
+WeightClass:300
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,18,ABCSans Light
+NameArray:0,Mac,4,ABCSans Light
+NameArray:0,Win,1,ABCSans
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:ABCSans
+FamilyName:ABCSans
+StyleName:Regular
+FullName:ABCSans Regular
+MenuName:ABCSans
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:D:\other data\screw puzzle\new ui\Font\abcsans-regular.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+hasCOLR:no
+VariableFontType:NonVariableFont
+FileLength:86556
+FileModTime:1743147164
+WeightClass:400
+WidthClass:5
+AngleClass:0
+NameArray:0,Mac,18,ABCSans
+NameArray:0,Mac,4,ABCSans Regular
+NameArray:0,Win,1,ABCSans
+%EndFont
+
