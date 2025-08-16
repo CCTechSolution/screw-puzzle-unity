@@ -1,6 +1,16 @@
 using UnityEngine;
 using GoogleMobileAds.Api;
 
+/// <summary>
+/// AD_Cng_Ab: Controls bottom banner ads in the game.
+/// Author / Lead Developer: Hafiz Saad Khawar
+/// Responsibilities:
+/// - Implemented ad display logic using AdMob SDK
+/// - Added conditional ad disabling based on player preferences
+/// - Optimized ad calls with delayed invocation to prevent UI issues
+/// - Ensured safe handling when AdmobAdsManager instance is null
+/// </summary>
+
 public class AD_Cng_Ab : MonoBehaviour
 {
     public bool AB;
@@ -41,4 +51,5 @@ public class AD_Cng_Ab : MonoBehaviour
         if(AdmobAdsManager.Instance)
         AdmobAdsManager.Instance.Btn_Hide_Bottom_Ab();
     }
+
 }
