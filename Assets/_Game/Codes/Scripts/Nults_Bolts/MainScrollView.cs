@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,8 +11,27 @@ namespace NultBolts
 
         private void OnEnable()
         {
-            Invoke(nameof(SetReact), 0.2f);
+            //Invoke(nameof(SetReact), 0.2f);
+            Invoke(nameof(SetReact2), 0.2f);
         }
+        private void SetReact2()
+        {
+            int level = NultBoltsManager.Instance.latestLevel;
+            Debug.Log("Latest level is " + level);
+
+            // base = 4 levels per step
+            // step = 0.04f per 4 levels
+            int stepIndex = (level - 1) / 4;   // (1?4 = 0, 5?8 = 1, etc.)
+            float pos = stepIndex * 0.04f;
+
+            // Clamp between 0 and 1
+            pos = Mathf.Clamp01(pos);
+
+            scrollRect.verticalNormalizedPosition = pos;
+
+            Debug.Log("Scroll position set to " + pos);
+        }
+
         private void SetReact()
         {
             Debug.Log("Latest level is " + NultBoltsManager.Instance.latestLevel);
@@ -101,6 +121,33 @@ namespace NultBolts
             
         }
 
-        
+
+
+
+
+        public NB_LevelController levelController;
+        public static event Action OnLevelSelected;
+        public GameObject currentPanel;
+
+        public void LoadLevel()
+        {
+            NultBoltsManager.Instance.ChangeLevelIndex(NultBoltsManager.Instance.latestLevel);
+            levelController.LoadLevel(NultBoltsManager.Instance.latestLevel);
+            NultBoltsManager.Instance.actionLoadLevel?.Invoke();
+            OnLevelSelected?.Invoke();
+            currentPanel.SetActive(false);
+            if (NultBoltsManager.Instance.latestLevel > 3)
+            {
+                NB_Timer.Instance.ConsiderTimer();
+                NB_Timer.Instance.EnableTimer();
+            }
+            else
+            {
+                NB_Timer.Instance.DontConsiderTimer();
+                NB_Timer.Instance.DisableTimer();
+            }
+            NB_GameplayMenu.Instance.CheckSkipLevel();
+            NB_Timer.Instance.NB_GameplayMenu_OnLevelStart();
+        }
     }
 }

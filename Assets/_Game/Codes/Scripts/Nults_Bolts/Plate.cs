@@ -22,7 +22,7 @@ namespace NultBolts
             collider = GetComponent<Collider2D>();
 
             rigidbody2D.gravityScale = .75f;
-            rigidbody2D.angularDrag = .125f;
+            rigidbody2D.angularDamping = .125f;
 
         }
         public void FixHoleSize()

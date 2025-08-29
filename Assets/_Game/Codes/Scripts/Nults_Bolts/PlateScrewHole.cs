@@ -32,7 +32,10 @@ namespace NultBolts
             hasCrew = false;
             if(currentScrew)currentScrew.PlayAnimUnPin();
             currentScrew = null;
-
+            if(plate)
+            {
+                plate.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+            }
         }
         public void GetBackScrew()
         {
