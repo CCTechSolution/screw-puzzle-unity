@@ -97,3 +97,9 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+# --- Firebase / Google SDK large binaries ---
+/Assets/Firebase/Plugins/**/FirebaseCppApp-*.bundle
+/Assets/Firebase/Plugins/**/FirebaseCppApp-*.so
+/Assets/Firebase/Plugins/**/FirebaseCppAnalytics-*.bundle
+/Assets/Firebase/Plugins/**/FirebaseCppAnalytics-*.so

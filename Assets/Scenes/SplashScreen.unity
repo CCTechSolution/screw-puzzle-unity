@@ -1491,6 +1491,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &930884192
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 930884194}
+  - component: {fileID: 930884193}
+  m_Layer: 0
+  m_Name: FirebaseInit
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &930884193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930884192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5141b5141ad0543339c4ac206b7cf303, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &930884194
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930884192}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.38068035, y: -5.5725737, z: 90}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &941238705
 GameObject:
   m_ObjectHideFlags: 0
@@ -4276,9 +4320,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd4c12be79df84e419ed25703750b5f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID_Live: 1
+  ID_Live: 0
   ID_Single: 1
-  ID_Test: 0
+  ID_Test: 1
   Unity_Logger: 1
   Skip_Appopen: 0
   Skip_Banner_Top: 0
@@ -4518,3 +4562,4 @@ SceneRoots:
   - {fileID: 833613903}
   - {fileID: 4342726168936492061}
   - {fileID: 1867582839}
+  - {fileID: 930884194}

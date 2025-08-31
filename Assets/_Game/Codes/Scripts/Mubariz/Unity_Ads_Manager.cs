@@ -190,6 +190,8 @@ public class Unity_Ads_Manager : MonoBehaviour, IUnityAdsInitializationListener,
     }
     void ShowInt()
     {
+        FirebaseInit.instance.LogEvent("Unity Ads: Interstitial: Show");
+
         // Show Call
         Debug.Log("Showing Ad: " + _intID);
         Advertisement.Show(_intID, this);
@@ -242,6 +244,8 @@ public class Unity_Ads_Manager : MonoBehaviour, IUnityAdsInitializationListener,
     }
     void ShowRew()
     {
+        FirebaseInit.instance.LogEvent("Unity Ads: Rewarded: Show");
+
         // Show Call
         Debug.Log("Showing Ad: " + _rewID);
         Advertisement.Show(_rewID, this);

@@ -95,9 +95,8 @@ namespace NultBolts
 
                 if (plates.Count == 0)
                 {
-
                     NultBoltsManager.Instance.ChangeGameState(TypeManager.GameState.Win);
-
+                    FirebaseInit.instance.LogEvent("Progression: Level Win");
                 }
             }
         }

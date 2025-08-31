@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "147117874841",
+    "project_id": "screw-puzzle-ab1c9",
+    "storage_bucket": "screw-puzzle-ab1c9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:147117874841:android:5858c00f97771e9f1de208",
+        "android_client_info": {
+          "package_name": "com.extreme.screw.puzzle"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0Yj1zZ7uhHmqqY2y6XHpJBOnGowNGhKA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      },
+      "admob_app_id": "ca-app-pub-3497625833392567~6387069740"
+    }
+  ],
+  "configuration_version": "1"
+}

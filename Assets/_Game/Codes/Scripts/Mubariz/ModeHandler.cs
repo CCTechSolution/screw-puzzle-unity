@@ -72,7 +72,7 @@ namespace NultBolts
             btnResume.onClick.AddListener(Resume);
         }
 
-        void UpdateState()
+        public void UpdateState()
         {
             if (PlayerPrefs.GetInt("Excited") == 1 || NultBoltsManager.Instance.latestLevel >= 20)
             {
@@ -126,6 +126,7 @@ namespace NultBolts
             if (!excitedUnlocked)
             {
                 GameAppManager.Instance.UnlockExcitedMode();
+                return;
             }
 
             AnyModeClicked();
@@ -136,6 +137,7 @@ namespace NultBolts
             if (!happyUnlocked)
             {
                 GameAppManager.Instance.UnlockHappyMode();
+                return;
             }
 
             AnyModeClicked();
@@ -145,6 +147,7 @@ namespace NultBolts
             if (!sadUnlocked)
             {
                 GameAppManager.Instance.UnlockSadMode();
+                return;
             }
 
             AnyModeClicked();

@@ -105,6 +105,7 @@ namespace NultBolts
         private void TimeEnded()
         {
             failPanel.SetActive(true);
+            FirebaseInit.instance.LogEvent("Progression: Level Lose");
         }
 
         void ShowLevelTitle()

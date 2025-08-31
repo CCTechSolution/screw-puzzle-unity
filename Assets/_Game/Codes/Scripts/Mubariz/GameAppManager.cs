@@ -9,7 +9,6 @@ public class InAppItem
 {
     public string iapItem_Name;
     public ProductType producttype;
-
 }
 
 public class GameAppManager : MonoBehaviour, IStoreListener
@@ -20,19 +19,23 @@ public class GameAppManager : MonoBehaviour, IStoreListener
         get
         {
             if (!instance_)
+            {
                 instance_ = GameObject.FindObjectOfType<GameAppManager>();
-
+                Debug.Log("[GameAppManager] Instance created");
+            }
             return instance_;
         }
     }
+
     public InAppItem[] iapitems = null;
     public static event EventHandler consumable_events;
-    private static IStoreController m_StoreController;          // The Unity Purchasing system.
-    private static IExtensionProvider m_StoreExtensionProvider; // The store-specific Purchasing subsystems.
+    private static IStoreController m_StoreController;
+    private static IExtensionProvider m_StoreExtensionProvider;
+
     public static bool check_Unlockall = false;
     public static string remove_AdsString = "remove_adds";
     public static string UnlockAll = "unlockall";
-    //public static string UnlockCars="unlockcars";
+
     private static string kProductNameAppleSubscription = "com.unity3d.subscription.new";
     private static string kProductNameGooglePlaySubscription = "com.unity3d.subscription.original";
 
@@ -40,235 +43,207 @@ public class GameAppManager : MonoBehaviour, IStoreListener
 
     void Awake()
     {
-        //		instance = this;
-        DontDestroyOnLoad(Instance);
+        Debug.Log("[GameAppManager] Awake called");
+        //DontDestroyOnLoad(Instance);
     }
+
     void Start()
     {
+        Debug.Log("[GameAppManager] Start called");
 
         if (m_StoreController == null)
         {
-            //			Invoke ("InitializePurchasing",3f);
-            
+            Debug.Log("[GameAppManager] StoreController is null → initializing purchasing");
             InitializePurchasing();
+        }
+        else
+        {
+            Debug.Log("[GameAppManager] StoreController already initialized");
         }
     }
 
-    public void BuyWallpapers()
-    {
-        Buy_Product(0);
-    }
+    // ========== PURCHASE WRAPPERS ==========
+    public void BuyWallpapers() { Debug.Log("[IAP] BuyWallpapers called"); Buy_Product(0); }
+    public void UnlockExcitedMode() { Debug.Log("[IAP] UnlockExcitedMode called"); Buy_Product(1); }
+    public void UnlockHappyMode() { Debug.Log("[IAP] UnlockHappyMode called"); Buy_Product(2); }
+    public void UnlockSadMode() { Debug.Log("[IAP] UnlockSadMode called"); Buy_Product(3); }
+    public void RemoverTimerFromGame() { Debug.Log("[IAP] RemoverTimerFromGame called"); Buy_Product(4); }
+    public void UnlockAllLevels() { Debug.Log("[IAP] UnlockAllLevels called"); Buy_Product(5); }
+    public void UnlockEverything() { Debug.Log("[IAP] UnlockEverything called"); Buy_Product(6); }
 
-    public void UnlockExcitedMode()
-    {
-        Buy_Product(1);
-    }
-    public void UnlockHappyMode()
-    {
-        Buy_Product(2);
-    }
-    public void UnlockSadMode()
-    {
-        Buy_Product(3);
-    }
-    public void RemoverTimerFromGame()
-    {
-        Buy_Product(4);
-
-    }
-    public void UnlockAllLevels()
-    {
-        Buy_Product(5);
-    }
-    public void UnlockEverything()
-    {
-        Buy_Product(6);
-    }
-
+    // ========== INITIALIZATION ==========
     public void InitializePurchasing()
     {
+        Debug.Log("[GameAppManager] InitializePurchasing called");
+
         if (IsInitialized())
         {
-
-            // ... we are done here.
+            Debug.Log("[GameAppManager] Already initialized → skipping");
             return;
         }
 
-
         var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
-
         builder.AddProduct(remove_AdsString, ProductType.NonConsumable);
-        //		builder.AddProduct(UnlockAll, ProductType.NonConsumable);
-        for (int i = 0; i < GameAppManager.Instance.iapitems.Length; i++)
+
+        Debug.Log("[GameAppManager] Adding IAP items...");
+        for (int i = 0; i < iapitems.Length; i++)
         {
-            builder.AddProduct(GameAppManager.Instance.iapitems[i].iapItem_Name, GameAppManager.Instance.iapitems[i].producttype);
+            Debug.Log($"[GameAppManager] Adding product: {iapitems[i].iapItem_Name}, type: {iapitems[i].producttype}");
+            builder.AddProduct(iapitems[i].iapItem_Name, iapitems[i].producttype);
         }
-        builder.Configure<IGooglePlayConfiguration>().SetDeferredPurchaseListener(OnDeferredPurchase);
+
+        //builder.Configure<IGooglePlayConfiguration>().SetDeferredPurchaseListener(OnDeferredPurchase);
         UnityPurchasing.Initialize(this, builder);
+
+        Debug.Log("[GameAppManager] UnityPurchasing.Initialize called");
     }
+
     void OnDeferredPurchase(Product product)
     {
-        Debug.Log($"Purchase of {product.definition.id} is deferred");
-        //btnGold.enabled = false;
-
+        Debug.Log($"[IAP] Purchase of {product.definition.id} is deferred");
     }
+
     public void OnPurchaseDeferred(Product product)
     {
-
-        Debug.Log("Deferred product " + product.definition.id.ToString());
+        Debug.Log("[IAP] OnPurchaseDeferred called for " + product.definition.id);
     }
+
     public bool IsInitialized()
     {
-        
-        return m_StoreController != null && m_StoreExtensionProvider != null;
+        bool result = (m_StoreController != null && m_StoreExtensionProvider != null);
+        Debug.Log($"[GameAppManager] IsInitialized = {result}");
+        return result;
     }
 
-
+    // ========== BUY LOGIC ==========
     void Buy_noAds()
     {
-        print("Buy_noAds");
+        Debug.Log("[IAP] Buy_noAds called");
         if (IsInitialized())
         {
-            print("IsInitialized*****************");
-
             if (!CheckProductID_Status(remove_AdsString))
             {
+                Debug.Log("[IAP] Buying noAds");
                 BuyProductID(remove_AdsString);
             }
+            else { Debug.Log("[IAP] noAds already owned");
+
+              
+            }
         }
+        else Debug.Log("[IAP] Not initialized, cannot buy noAds");
     }
+
     public void Buy_unlockall()
     {
+        Debug.Log("[IAP] Buy_unlockall called");
         if (IsInitialized())
         {
             if (!CheckProductID_Status(UnlockAll))
             {
+                Debug.Log("[IAP] Buying UnlockAll");
                 BuyProductID(UnlockAll);
             }
+            else Debug.Log("[IAP] UnlockAll already owned");
         }
-
+        else Debug.Log("[IAP] Not initialized, cannot buy UnlockAll");
     }
+
     public void Buy_Product(int iapID)
     {
+        Debug.Log($"[IAP] Buy_Product called with ID {iapID}");
+
+        if (iapID >= iapitems.Length)
+        {
+            Debug.LogError("[IAP] Invalid IAP index: " + iapID);
+            return;
+        }
+
         if (IsInitialized())
         {
-            if (GameAppManager.Instance.iapitems[iapID].producttype == ProductType.NonConsumable)
+            var item = iapitems[iapID];
+            Debug.Log($"[IAP] Attempting to buy {item.iapItem_Name}");
+
+            if (item.producttype == ProductType.NonConsumable)
             {
-                if (!CheckProductID_Status(GameAppManager.Instance.iapitems[iapID].iapItem_Name))
+                //if (!CheckProductID_Status(item.iapItem_Name))
                 {
-                    BuyProductID(GameAppManager.Instance.iapitems[iapID].iapItem_Name);
+                    BuyProductID(item.iapItem_Name);
                 }
+                //else Debug.Log($"[IAP] {item.iapItem_Name} already owned");
             }
             else
             {
-                BuyProductID(GameAppManager.Instance.iapitems[iapID].iapItem_Name);
+                BuyProductID(item.iapItem_Name);
             }
+        }
+        else
+        {
+            Debug.Log("[IAP] Cannot buy, not initialized");
         }
     }
 
     public bool CheckProductID_Status(string productId)
     {
-        Product product = m_StoreController.products.WithID(productId);
-        if (product != null && product.hasReceipt)
-        {
+        Debug.Log("[IAP] Checking product status: " + productId);
 
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        Product product = m_StoreController?.products.WithID(productId);
+        bool owned = product != null && product.hasReceipt;
+        Debug.Log($"[IAP] Product {productId} owned? {owned}");
+        return owned;
     }
 
     void BuyProductID(string productId)
     {
+        Debug.Log("[IAP] BuyProductID called for " + productId);
+
         if (IsInitialized())
         {
             Product product = m_StoreController.products.WithID(productId);
             if (product != null && product.availableToPurchase)
             {
-                Debug.Log(string.Format("Purchasing product asychronously: '{0}'", product.definition.id));
+                Debug.Log($"[IAP] Purchasing product: {product.definition.id}");
                 m_StoreController.InitiatePurchase(product);
             }
             else
             {
-                Debug.Log("BuyProductID: FAIL. Not purchasing product, either is not found or is not available for purchase");
+                Debug.Log($"[IAP] FAIL: Product {productId} not found or not available");
             }
         }
-
         else
         {
-            Debug.Log("BuyProductID FAIL. Not initialized.");
+            Debug.Log("[IAP] FAIL: Not initialized");
         }
     }
 
-
-
-    public void RestorePurchases()
-    {
-
-        if (!IsInitialized())
-        {
-            Debug.Log("RestorePurchases FAIL. Not initialized.");
-            return;
-        }
-
-
-        if (Application.platform == RuntimePlatform.IPhonePlayer ||
-            Application.platform == RuntimePlatform.OSXPlayer)
-        {
-
-            Debug.Log("RestorePurchases started ...");
-
-
-            var apple = m_StoreExtensionProvider.GetExtension<IAppleExtensions>();
-
-            apple.RestoreTransactions((result) =>
-            {
-
-                Debug.Log("RestorePurchases continuing: " + result + ". If no further messages, no purchases available to restore.");
-            });
-        }
-
-        else
-        {
-
-            Debug.Log("RestorePurchases FAIL. Not supported on this platform. Current = " + Application.platform);
-        }
-    }
-
-
-    //  
-    // --- IStoreListener
-    //
-
+    // ========== IStoreListener ==========
     public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
     {
+        Debug.Log("[IAP] OnInitialized SUCCESS");
+
         m_StoreController = controller;
-
         m_StoreExtensionProvider = extensions;
-        if (IsInitialized())
-        {
-            if (CheckProductID_Status(remove_AdsString))
-            {
-                //Tenlogiclocal.Ads_purchase = true;
-                //	Debug.Log ("ads are purchase");
-            }
-
-            if (CheckProductID_Status(UnlockAll))
-            {
-                check_Unlockall = true;
-                //	Debug.Log ("ads are purchase");
-            }
-        }
     }
-
 
     public void OnInitializeFailed(InitializationFailureReason error)
     {
-
-        Debug.Log("OnInitializeFailed InitializationFailureReason:" + error);
+        Debug.LogError("[IAP] OnInitializeFailed: " + error);
     }
+
+
+    [SerializeField] GameObject LevelUnlockScreen;
+    [SerializeField] GameObject BuyTimerScreen;
+    [SerializeField] GameObject RemoveAdsScreen;
+    [SerializeField] GameObject RemoveAdsScreen2;
+    [SerializeField] GameObject Lock_Happy;
+    [SerializeField] GameObject Lock_Sad;
+    [SerializeField] GameObject Lock_Excited;
+
+
+    [SerializeField] GameObject icon_jumbo;
+    [SerializeField] GameObject icon_removeTime;
+    [SerializeField] GameObject icon_unlockLevels;
+
     public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs args)
     {
 
@@ -281,11 +256,12 @@ public class GameAppManager : MonoBehaviour, IStoreListener
         else if (String.Equals(args.purchasedProduct.definition.id, GameAppManager.Instance.iapitems[0].iapItem_Name, StringComparison.Ordinal))//unlock_all
         {
             Debug.Log(string.Format("ProcessPurchase: PASS. Product: '{0}'", args.purchasedProduct.definition.id));
-            
+
 
             ingameWallpaper.UnlockAllWallPapers();
             Debug.Log("RemovedAds and UnlockWallpaper");
 
+            FirebaseInit.instance.LogEvent("IAP Purchase : " + GameAppManager.Instance.iapitems[0].iapItem_Name);
         }
 
         //1 EXCITED MODE
@@ -295,6 +271,10 @@ public class GameAppManager : MonoBehaviour, IStoreListener
 
             PlayerPrefs.SetInt("Excited", 1);
             Debug.Log("Excited InApp");
+
+            FirebaseInit.instance.LogEvent("IAP Purchase : " + GameAppManager.Instance.iapitems[1].iapItem_Name);
+            Lock_Excited.SetActive(false);
+            ModeHandler.Instance.UpdateState();
 
         }
 
@@ -306,46 +286,64 @@ public class GameAppManager : MonoBehaviour, IStoreListener
 
             PlayerPrefs.SetInt("Happy", 1);
             Debug.Log("Happy InApp");
+            Lock_Happy.SetActive(false);
+            FirebaseInit.instance.LogEvent("IAP Purchase : " + GameAppManager.Instance.iapitems[2].iapItem_Name);
+            ModeHandler.Instance.UpdateState();
+
         }
-        
+
         //3 SAD MODE
         else if (String.Equals(args.purchasedProduct.definition.id, GameAppManager.Instance.iapitems[3].iapItem_Name, StringComparison.Ordinal))//cars
         {
 
             Debug.Log(string.Format("ProcessPurchase: PASS. Product: '{0}'", args.purchasedProduct.definition.id));
 
+            ModeHandler.Instance.UpdateState();
 
             PlayerPrefs.SetInt("Sad", 1);
             Debug.Log("Sad InApp");
+            Lock_Sad.SetActive(false);
+
+            FirebaseInit.instance.LogEvent("IAP Purchase : " + GameAppManager.Instance.iapitems[3].iapItem_Name);
 
         }
-        
+
         //4 REMOVE TIMER
         else if (String.Equals(args.purchasedProduct.definition.id, GameAppManager.Instance.iapitems[4].iapItem_Name, StringComparison.Ordinal))//cars
         {
-
+            icon_removeTime.SetActive(false);
             Debug.Log(string.Format("ProcessPurchase: PASS. Product: '{0}'", args.purchasedProduct.definition.id));
 
+            BuyTimerScreen.SetActive(false);
 
             PlayerPrefs.SetInt("RemoveTimer", 1);
             Debug.Log("Timer remove from the game");
+            ModeHandler.Instance.UpdateState();
+
+            FirebaseInit.instance.LogEvent("IAP Purchase : " + GameAppManager.Instance.iapitems[4].iapItem_Name);
 
         }
-        
+
         //5  UNLOCK ALL LEVELS
         else if (String.Equals(args.purchasedProduct.definition.id, GameAppManager.Instance.iapitems[5].iapItem_Name, StringComparison.Ordinal))//cars
         {
+            icon_unlockLevels.SetActive(false);
 
             Debug.Log(string.Format("ProcessPurchase: PASS. Product: '{0}'", args.purchasedProduct.definition.id));
 
+            LevelUnlockScreen.SetActive(false);
 
             PlayerPrefs.SetInt("AllLevels", 1);
             NB_LevelLoader.Instance.UnlockAllLevels();
+            LevelUnlockScreen.SetActive(false);
+            FirebaseInit.instance.LogEvent("IAP Purchase : " + GameAppManager.Instance.iapitems[5].iapItem_Name);
+
         }
-        
+
         //6  All Jumbo
-        else if (String.Equals(args.purchasedProduct.definition.id, GameAppManager.Instance.iapitems[5].iapItem_Name, StringComparison.Ordinal))//cars
+        else if (String.Equals(args.purchasedProduct.definition.id, GameAppManager.Instance.iapitems[6].iapItem_Name, StringComparison.Ordinal))//cars
         {
+            icon_jumbo.SetActive(false);
 
             Debug.Log(string.Format("ProcessPurchase: PASS. Product: '{0}'", args.purchasedProduct.definition.id));
 
@@ -365,6 +363,14 @@ public class GameAppManager : MonoBehaviour, IStoreListener
             Debug.Log("Excited InApp");
             ingameWallpaper.UnlockAllWallPapers();
             Debug.Log("RemovedAds and UnlockWallpaper");
+            RemoveAdsScreen.SetActive(false);
+            RemoveAdsScreen2.SetActive(false);
+
+            AdmobAdsManager.Instance.hideSmallBanner();
+            AdmobAdsManager.Instance.hideMediumBanner();
+
+            FirebaseInit.instance.LogEvent("IAP Purchase : " + GameAppManager.Instance.iapitems[6].iapItem_Name);
+
         }
         else
         {
@@ -376,47 +382,27 @@ public class GameAppManager : MonoBehaviour, IStoreListener
         //Data.SaveData();
         return PurchaseProcessingResult.Complete;
     }
-
     void InAppPurchased()
-    { 
-            AdmobAdsManager.Instance.Btn_InApp_Done();
+    {
+        AdmobAdsManager.Instance.Btn_InApp_Done();
     }
-
     void LoadScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    void ReLoad()
-    {
-        string xXx = SceneManager.GetActiveScene().name;
-        SceneManager.LoadScene(xXx);
-    }
-
     public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
     {
-
-        Debug.Log(string.Format("OnPurchaseFailed: FAIL. Product: '{0}', PurchaseFailureReason: {1}", product.definition.storeSpecificId, failureReason));
+        Debug.LogError($"[IAP] OnPurchaseFailed: {product.definition.storeSpecificId}, reason: {failureReason}");
     }
 
-    public void give_CosumeEvent()
-    {
-        if (consumable_events != null)
-            consumable_events(null, null);
-    }
-
-    public void removeall_ConsumeEvent()
-    {
-        consumable_events = null;
-    }
-    // Add New Line
     void IStoreListener.OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
     {
-        throw new NotImplementedException();
+        Debug.LogError($"[IAP] Explicit OnPurchaseFailed: {product.definition.storeSpecificId}, reason: {failureReason}");
     }
+
     void IStoreListener.OnInitializeFailed(InitializationFailureReason error, string message)
     {
-        throw new NotImplementedException();
+        Debug.LogError($"[IAP] Explicit OnInitializeFailed: {error}, message: {message}");
     }
 }
-

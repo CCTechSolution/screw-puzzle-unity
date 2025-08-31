@@ -279,7 +279,7 @@ PlayerSettings:
   AndroidEnableTango: 0
   androidEnableBanner: 1
   androidUseLowAccuracyLocation: 0
-  androidUseCustomKeystore: 0
+  androidUseCustomKeystore: 1
   m_AndroidBanners:
   - width: 320
     height: 180
@@ -952,11 +952,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: c790c447-755f-4f2d-abd6-f337d578052e
+  cloudProjectId: d8007dbe-87d9-45dd-ac11-bd4591b0c7b9
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
   projectName: Screw Puzzle
-  organizationId: mubarizullah
+  organizationId: mabhtbura-hnnaw
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

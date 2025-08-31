@@ -131,8 +131,9 @@ namespace NultBolts
 
         public void LoadLevel()
         {
-            NultBoltsManager.Instance.ChangeLevelIndex(NultBoltsManager.Instance.latestLevel);
-            levelController.LoadLevel(NultBoltsManager.Instance.latestLevel);
+            int lvlNo = Mathf.Clamp(NultBoltsManager.Instance.latestLevel, 1, 1111);
+            NultBoltsManager.Instance.ChangeLevelIndex(lvlNo);
+            levelController.LoadLevel(lvlNo);
             NultBoltsManager.Instance.actionLoadLevel?.Invoke();
             OnLevelSelected?.Invoke();
             currentPanel.SetActive(false);

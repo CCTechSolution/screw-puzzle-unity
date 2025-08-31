@@ -698,6 +698,10 @@ public class AdmobAdsManager : MediationHandler
 
     public void ShowSmallBanner()
     {
+        if (PlayerPrefs.GetInt("noADs") == 1)
+        {
+            return;
+        }
         chk_btn_sml();
         chk_btn_adp();
         chk_top();
@@ -748,6 +752,10 @@ public class AdmobAdsManager : MediationHandler
 
     public override void LoadMediumBanner()
     {
+        if (PlayerPrefs.GetInt("noADs") == 1)
+        {
+            return;
+        }
         if (Skip_MedRec == true)
         {
             // No ADs
@@ -793,6 +801,10 @@ public class AdmobAdsManager : MediationHandler
 
     public void ShowMediumBanner()
     {
+        if (PlayerPrefs.GetInt("noADs") == 1)
+        {
+            return;
+        }
         if (Skip_MedRec == true)
         {
             // No ADs
@@ -817,6 +829,10 @@ public class AdmobAdsManager : MediationHandler
     }
     public override void LoadInterstitial()
     {
+        if (PlayerPrefs.GetInt("noADs") == 1)
+        {
+            return;
+        }
         if (ADMOB_ID.Int_Allow == false)
         {
             // Nothing
@@ -848,6 +864,7 @@ public class AdmobAdsManager : MediationHandler
                             iAdStatus = AdLoadingStatus.NoInventory;
                             Interstitial_Loaded = false;
                             Debug.LogError("Interstitial ad failed to load an ad with error : " + error);
+                            FirebaseInit.instance.LogEvent("Admob: Interstitial:Failed to Load");
                             return;
                         }
                         if (InterAd == null)
@@ -855,6 +872,8 @@ public class AdmobAdsManager : MediationHandler
                             iAdStatus = AdLoadingStatus.NotLoaded;
                             Interstitial_Loaded = false;
                             Debug.LogError("Unexpected error: Interstitial load event fired with null ad and null error.");
+                            FirebaseInit.instance.LogEvent("Admob: Interstitial:null error");
+
                             return;
                         }
 
@@ -862,6 +881,7 @@ public class AdmobAdsManager : MediationHandler
                         {
                             Debug.Log("Interstitial ad loaded with response : " + InterAd.GetResponseInfo());
                         });
+                        FirebaseInit.instance.LogEvent("Admob: Interstitial:loaded");
 
                         interstitial = InterAd;
                         RegisterInterstitialEvents(interstitial);
@@ -901,6 +921,8 @@ public class AdmobAdsManager : MediationHandler
         };
         Inter.OnAdFullScreenContentOpened += () =>
         {
+            FirebaseInit.instance.LogEvent("Admob: Interstitial:Opened");
+
             iAdStatus = AdLoadingStatus.NotLoaded;
             isAdPlaying = true;
             Interstitial_Loaded = false;
@@ -911,6 +933,8 @@ public class AdmobAdsManager : MediationHandler
         };
         Inter.OnAdFullScreenContentClosed += () =>
         {
+            FirebaseInit.instance.LogEvent("Admob: Interstitial:Closed");
+
             isAdPlaying = false;
             MobileAdsEventExecutor.ExecuteInUpdate(() =>
             {
@@ -963,6 +987,7 @@ public class AdmobAdsManager : MediationHandler
                             {
                                 Logging.Log("Reward video Failed to Load. No Fill");
                             });
+                            FirebaseInit.instance.LogEvent("Admob: Reward video:Failed to Load");
                             rAdStatus = AdLoadingStatus.NoInventory;
                             return;
                         }
@@ -970,6 +995,8 @@ public class AdmobAdsManager : MediationHandler
                         {
                             rAdStatus = AdLoadingStatus.NotLoaded;
                             Debug.LogError("Unexpected error: Rewarded load event fired with null ad and null error.");
+                            FirebaseInit.instance.LogEvent("Admob: Reward video: null error");
+
                             return;
                         }
                         MobileAdsEventExecutor.ExecuteInUpdate(() =>
@@ -979,6 +1006,9 @@ public class AdmobAdsManager : MediationHandler
                             RegisterRewardEvents(rewardBasedVideo);
                             rAdStatus = AdLoadingStatus.Loaded;
                             RewardVideoLoadedEvent?.Invoke();
+
+                            FirebaseInit.instance.LogEvent("Admob: Reward video: Loaded");
+
                         });
                     });
                 }
@@ -1014,6 +1044,8 @@ public class AdmobAdsManager : MediationHandler
         };
         Rewardad.OnAdFullScreenContentOpened += () =>
         {
+            FirebaseInit.instance.LogEvent("Admob: Reward video: Displayed");
+
             isAdPlaying = true;
             rAdStatus = AdLoadingStatus.NotLoaded;
             MobileAdsEventExecutor.ExecuteInUpdate(() =>
@@ -1025,6 +1057,8 @@ public class AdmobAdsManager : MediationHandler
 
         Rewardad.OnAdFullScreenContentClosed += () =>
         {
+            FirebaseInit.instance.LogEvent("Admob: Reward video: Closed");
+
             isAdPlaying = false;
             rAdStatus = AdLoadingStatus.NotLoaded;
             Logging.Log("GG >> Admob:rad:Closed_H_Ecpm");
@@ -1063,6 +1097,7 @@ public class AdmobAdsManager : MediationHandler
                         aoAdStatus = AdLoadingStatus.NoInventory;
                         Logging.Log("GG >> Admob: AppOpenAd:NoInventory ");
                     });
+                    FirebaseInit.instance.LogEvent("Admob: AppOpenAd:NoInventory");
                     return;
                 }
 
@@ -1075,6 +1110,9 @@ public class AdmobAdsManager : MediationHandler
                     });
                     Debug.LogError("Unexpected error: App open ad load event fired with " +
                                    " null ad and null error.");
+
+                    FirebaseInit.instance.LogEvent("Admob: AppOpenAd:null Error ");
+
                     return;
                 }
 
@@ -1082,6 +1120,8 @@ public class AdmobAdsManager : MediationHandler
                 appOpenAd = AppOpenad;
                 AppOpenAdloadTime = DateTime.UtcNow;
                 aoAdStatus = AdLoadingStatus.Loaded;
+                FirebaseInit.instance.LogEvent("Admob: AppOpenAd:Loaded");
+
                 MobileAdsEventExecutor.ExecuteInUpdate(() =>
                 {
                     Logging.Log("GG >> Admob:aoad:Loaded_");
@@ -1115,6 +1155,7 @@ public class AdmobAdsManager : MediationHandler
 
         Openad.OnAdFullScreenContentOpened += () =>
         {
+            FirebaseInit.instance.LogEvent("Admob: AppOpenAd:opened");
             Btn_AppOpen_Start();
             Debug.Log("App open ad full screen content opened.");
             aoAdStatus = AdLoadingStatus.NoInventory;
@@ -1123,6 +1164,8 @@ public class AdmobAdsManager : MediationHandler
 
         Openad.OnAdFullScreenContentClosed += () =>
         {
+            FirebaseInit.instance.LogEvent("Admob: AppOpenAd:closed");
+
             Btn_AppOpen_End();
             Debug.Log("App open ad full screen content closed.");
             MobileAdsEventExecutor.ExecuteInUpdate(() =>
@@ -1261,6 +1304,11 @@ public class AdmobAdsManager : MediationHandler
     static int xyz_int;
     public override void ShowInterstitial()
     {
+        if (PlayerPrefs.GetInt("noADs") == 1)
+        {
+            return;
+        }
+
         if (ADMOB_ID.Int_Allow == false)
         {
             // Nothing
@@ -1388,6 +1436,10 @@ public class AdmobAdsManager : MediationHandler
 
     public override void ShowAppOpenAd()
     {
+        if (PlayerPrefs.GetInt("noADs") == 1)
+        {
+            return;
+        }
         if (Skip_Appopen == true)
         {
             // No ADs
@@ -1544,6 +1596,8 @@ public class AdmobAdsManager : MediationHandler
             }
             if (isSmallBannerShowing) { SM_ShowEvent?.Invoke(); }
         });
+
+        FirebaseInit.instance.LogEvent("Admob: SmallBanner:Loaded");
     }
     private void SmallBanner_HandleOnAdFailedToLoad(LoadAdError error)
     {
@@ -1561,6 +1615,7 @@ public class AdmobAdsManager : MediationHandler
                 isSmallBannerLoaded = false;
             }
         });
+        FirebaseInit.instance.LogEvent("Admob: SmallBanner:Failed to Load");
     }
 
     #endregion
@@ -1579,6 +1634,7 @@ public class AdmobAdsManager : MediationHandler
                 isMediumBannerLoaded = true;
 
             }
+            FirebaseInit.instance.LogEvent("Admob: MediumBanner:loaded");
             mediumBannerStatus = AdLoadingStatus.Loaded;
             if (isMRecShowing) { MRec_ShowEvent?.Invoke(); }
         });
@@ -1599,6 +1655,7 @@ public class AdmobAdsManager : MediationHandler
                 isMediumBannerLoaded = false;
             }
         });
+        FirebaseInit.instance.LogEvent("Admob: MediumBanner:Failed to Load");
     }
     #endregion
 
