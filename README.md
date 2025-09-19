@@ -2,6 +2,7 @@ Screw Puzzle – Block Escape (Unity)
 
 Candidate: Hafiz Saad Khawar
 Role: Technical Product Lead & Partner
+Company: CC Tech
 Platform: Android (iOS version coming soon)
 Engine: Unity 6.2 (6000.2.1f1)
 API Level: 35
@@ -51,3 +52,4 @@ Installation & Access
 Clone the repository or download the ZIP.
 
 Open in Unity Editor 6.2 (6000.2.1f1) or newer.
+
